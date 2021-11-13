@@ -8,6 +8,7 @@ import fa.dfa.DFA;
 
 public class NFA implements NFAInterface{
     private Set<NFAState> states;
+    
     private NFAState start;
     private Set<Character> ordAbc;
 
@@ -65,25 +66,30 @@ public class NFA implements NFAInterface{
     @Override
     public Set<? extends State> getStates() {
         // TODO Auto-generated method stub
-        return null;
+        return states;
     }
 
     @Override
-    public Set<? extends State> getFinalStates() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+    public Set<NFAState> getFinalStates() {
+		Set<NFAState> ret = new LinkedHashSet<NFAState>();
+		for(NFAState s : states){
+			if(s.isFinal()){
+				ret.add(s);
+			}
+		}
+		return ret;
+	}
 
     @Override
     public State getStartState() {
         // TODO Auto-generated method stub
-        return null;
+        return start;
     }
 
     @Override
     public Set<Character> getABC() {
         // TODO Auto-generated method stub
-        return null;
+        return ordAbc;
     }
 
     @Override
