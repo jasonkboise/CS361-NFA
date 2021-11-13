@@ -1,13 +1,14 @@
 package fa.nfa;
 
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import fa.State;
 
 public class NFAState extends State {
 
-    private HashMap<Character,LinkedList<NFAState>> delta;//delta
+    private HashMap<Character,Set<NFAState>> delta;//delta
 	private boolean isFinal;//remembers its type
     
     /**
@@ -31,7 +32,7 @@ public class NFAState extends State {
 	 */
     private void initDefault(String name) {
         this.name = name;
-        delta = new HashMap<Character,LinkedList<NFAState>>();
+        delta = new HashMap<Character,Set<NFAState>>();
     }
 
     /**
@@ -48,9 +49,9 @@ public class NFAState extends State {
 	 * @param toState to NFA state
 	 */
 	public void addTransition(char onSymb, NFAState toState){
-        LinkedList<NFAState> states = delta.get(onSymb);
+        Set<NFAState> states = delta.get(onSymb);
         if (states == null) {
-            states = new LinkedList<NFAState>();
+            states = new LinkedHashSet<NFAState>();
             states.add(toState);
             delta.put(onSymb, states);
         }
@@ -65,8 +66,8 @@ public class NFAState extends State {
 	 * @param symb - the alphabet symbol
 	 * @return the set of new states 
 	 */
-	public LinkedList<NFAState> getTo(char symb){
-		LinkedList<NFAState> ret = delta.get(symb);
+	public Set<NFAState> getTo(char symb){
+		Set<NFAState> ret = delta.get(symb);
 		if(ret == null){
 			 System.err.println("ERROR: DFAState.getTo(char symb) returns null on " + symb + " from " + name);
 			 System.exit(2);
