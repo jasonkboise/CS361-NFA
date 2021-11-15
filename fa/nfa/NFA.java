@@ -1,6 +1,11 @@
 package fa.nfa;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 import fa.State;
@@ -59,13 +64,26 @@ public class NFA implements NFAInterface{
 
     @Override
     public void addTransition(String fromState, char onSymb, String toState) {
-        // TODO Auto-generated method stub
+        
+        NFAState from = checkIfExists(fromState);
+		NFAState to = checkIfExists(toState);
+		if(from == null){
+			System.err.println("ERROR: No NFA state exists with name " + fromState);
+			System.exit(2);
+		} else if (to == null){
+			System.err.println("ERROR: No NFA state exists with name " + toState);
+			System.exit(2);
+		}
+		from.addTransition(onSymb, to);
+		
+		if(!ordAbc.contains(onSymb)){
+			ordAbc.add(onSymb);
+		}
         
     }
 
     @Override
     public Set<? extends State> getStates() {
-        // TODO Auto-generated method stub
         return states;
     }
 
@@ -82,20 +100,61 @@ public class NFA implements NFAInterface{
 
     @Override
     public State getStartState() {
-        // TODO Auto-generated method stub
         return start;
     }
 
     @Override
     public Set<Character> getABC() {
-        // TODO Auto-generated method stub
         return ordAbc;
     }
 
     @Override
     public DFA getDFA() {
-        // TODO Auto-generated method stub
-        return null;
+        DFA dfa = new DFA();
+		Map<Set<NFAState>, String> visited = new LinkedHashMap<Set<NFAState>, String>();
+
+        Set<NFAState> states = eClosure(start);
+
+        visited.put(states, states.toString());
+
+        LinkedList<Set<NFAState>> queue = new LinkedList<Set<NFAState>>();
+
+        queue.add(states);
+
+        dfa.addStartState(visited.get(states));
+
+        while (!queue.isEmpty()) {
+            states = queue.poll();
+
+            for (char c: ordAbc) {
+                LinkedHashSet<NFAState> temp = new LinkedHashSet<>();
+                for (NFAState st : states) {
+                /* Adds all of the elements from 'st.getTo(c)' to temp */
+                    temp.addAll(st.getTo(c));
+                }
+                LinkedHashSet<NFAState> temp1 = new LinkedHashSet<>();
+                for(NFAState st : temp){
+                    temp1.addAll(eClosure(st));
+                }
+                if(!visited.containsKey(temp1)){
+                    visited.put(temp1, temp1.toString());
+                    queue.add(temp1);
+
+                    if(containsFinalState(temp1)){
+                        dfa.addFinalState(visited.get(temp1));
+                    }else{
+                        dfa.addState(visited.get(temp1));
+                    }
+                }
+                /* Add transitions to the DFA */
+                dfa.addTransition(visited.get(states), c, visited.get(temp1));
+            }
+        }
+		return dfa;
+    }
+
+    private boolean containsFinalState(LinkedHashSet<NFAState> temp1) {
+        return false;
     }
 
     @Override
@@ -105,12 +164,20 @@ public class NFA implements NFAInterface{
 
     @Override
     public Set<NFAState> eClosure(NFAState s) {
-        
-        return null;
+        Set<NFAState> visited = new LinkedHashSet<NFAState>();
+        return eClosure(s, visited);
     }
 
-    public void DFS() {
-
+    private Set<NFAState> eClosure(NFAState s, Set<NFAState> visited) {
+        //Set<NFAState> visitedStates = visited;
+        Set<NFAState> list = new LinkedHashSet<NFAState>();
+        if(!s.getTo('e').isEmpty() && !visited.contains(s)) {
+            visited.add(s);
+            for (NFAState curr: s.getTo('e')) {
+                list.addAll(eClosure(curr, visited));
+            }
+        }
+        return list;
     }
 
     /**

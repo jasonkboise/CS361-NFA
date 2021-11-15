@@ -1,6 +1,7 @@
 package fa.nfa;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -32,7 +33,7 @@ public class NFAState extends State {
 	 */
     private void initDefault(String name) {
         this.name = name;
-        delta = new HashMap<Character,Set<NFAState>>();
+        delta = new LinkedHashMap<Character,Set<NFAState>>();
     }
 
     /**
