@@ -1,15 +1,15 @@
 package fa.nfa;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 import fa.State;
 
 public class NFAState extends State {
 
-    private HashMap<Character,Set<NFAState>> delta;//delta
+    private Map<Character,Set<NFAState>> delta;//delta
 	private boolean isFinal;//remembers its type
     
     /**
@@ -50,14 +50,13 @@ public class NFAState extends State {
 	 * @param toState to NFA state
 	 */
 	public void addTransition(char onSymb, NFAState toState){
-        Set<NFAState> states = delta.get(onSymb);
-        if (states == null) {
-            states = new LinkedHashSet<NFAState>();
-            states.add(toState);
-            delta.put(onSymb, states);
+        if (delta.containsKey(onSymb)) {
+            delta.get(onSymb).add(toState);
         }
         else {
-            states.add(toState);
+            Set<NFAState> set = new LinkedHashSet<NFAState>();
+            set.add(toState);
+            delta.put(onSymb, set);
         }
 	}
 
@@ -68,12 +67,12 @@ public class NFAState extends State {
 	 * @return the set of new states 
 	 */
 	public Set<NFAState> getTo(char symb){
-		Set<NFAState> ret = delta.get(symb);
-		if(ret == null){
-			 System.err.println("ERROR: DFAState.getTo(char symb) returns null on " + symb + " from " + name);
-			 System.exit(2);
-			}
-		return delta.get(symb);
+		if(delta.containsKey(symb)){
+			 return delta.get(symb);
+		}
+        else {
+            return new LinkedHashSet<NFAState>();
+        }
 	}
 
 }
