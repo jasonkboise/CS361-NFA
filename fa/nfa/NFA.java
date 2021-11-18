@@ -147,14 +147,14 @@ public class NFA implements NFAInterface{
     }
 
     private boolean containsFinalState(Set<NFAState> states) {
-        boolean b = false;
+        boolean ret = false;
         for(NFAState state: states){
             if(state.isFinal()){
-                b = true;
+                ret = true;
                 break;
             }
         }
-        return b;
+        return ret;
     }
 
     @Override
