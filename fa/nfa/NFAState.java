@@ -7,29 +7,44 @@ import java.util.Set;
 
 import fa.State;
 
+/**
+ * Implementation of NFAState class to be used
+ * in project 2
+ * @author Jason Kuphaldt, Connor Jackson
+ *
+ */
+
 public class NFAState extends State {
 
     private Map<Character,Set<NFAState>> delta;//delta
 	private boolean isFinal;//remembers its type
     
     /**
-	 * Default constructor
-	 * @param name the state name
+	 * Contructor takes a string name
+     * and creates an NFAState that
+     * is not a finalstate.
+	 * @param name the state name as string
 	 */
     public NFAState(String name) {
         initDefault(name);
         isFinal = false;
     }
-
+ /**
+	 * 
+	 * @param name is string that is the name of state
+	 * @param isFinal boolean that tracks if final
+     * state or not
+	 */
     public NFAState(String name, boolean isFinal) {
         initDefault(name);
         this.isFinal = isFinal;
     }
 
     /**
-	 * Overlaoded constructor that sets the state type
-	 * @param name the state name
-	 * @param isFinal the type of state: true - final, false - nonfinal.
+	 * 
+	 * @param name as string
+     * creates hashmap for transition.
+	 * 
 	 */
     private void initDefault(String name) {
         this.name = name;
@@ -45,7 +60,9 @@ public class NFAState extends State {
     }
 
     /**
-	 * Add the transition from <code> this </code> object
+	 * Add the transition from current state
+     * to the given state based on alphabet
+     * symbol.
 	 * @param onSymb the alphabet symbol
 	 * @param toState to NFA state
 	 */
@@ -61,10 +78,10 @@ public class NFAState extends State {
 	}
 
     /**
-	 * Retrieves the state that <code>this</code> transitions to
-	 * on the given symbol
-	 * @param symb - the alphabet symbol
-	 * @return the set of new states 
+	 * Returns the transition based on the
+     * symb for the current state.
+	 * @param symb char as alphabet symbol
+	 * @return set of NFAStates
 	 */
 	public Set<NFAState> getTo(char symb){
 		if(delta.containsKey(symb)){
