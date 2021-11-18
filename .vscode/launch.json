@@ -9,7 +9,7 @@
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}",
-            "args": "./tests/p2tc1.txt"
+            "args": "./tests/p2tc2.txt"
         },
         {
             "type": "java",

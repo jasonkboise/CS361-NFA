@@ -1,4 +1,4 @@
-# Project 2: NDA Creator
+# Project 2: NFA Creator
 
 * Author: Jason Kuphalt, Connor Jackson
 * Class: CS361
@@ -15,7 +15,7 @@ First compile the program: javac fa/nfa/NFADriver.java
 
 To run this program in onyx go to the folder that the project is located in and type: java fa.nfa.NFADriver ./tests/"yourtesthere"
 
-example: java fa.dfa.DFADriver ./tests/p2tc1.txt
+example: java fa.nfa.NFADriver ./tests/p2tc1.txt
 
 ## Discussion
 
